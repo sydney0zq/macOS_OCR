@@ -24,6 +24,18 @@ func getPasteboardImage() -> NSImage?
     return NSImage(data: imgData)
 }
 
+func postProcessText(str: String) -> String
+{
+    var newString = str.replacingOccurrences(of: " ", with: "")
+    newString = newString.replacingOccurrences(of: ",", with: "，")
+    newString = newString.replacingOccurrences(of: ".", with: "。")
+    newString = newString.replacingOccurrences(of: ":", with: "：")
+    newString = newString.replacingOccurrences(of: "?", with: "？")
+    newString = newString.replacingOccurrences(of: "!", with: "！")
+    return newString
+}
+
+
 func convertNSImageToCGImage(inputImage: NSImage) -> CGImage? {
     var imageRect = CGRect(x: 0, y: 0, width: inputImage.size.width, height: inputImage.size.height)
     print("===> Get image from pasteboard, width*height \(inputImage.size.width)*\(inputImage.size.height)")
@@ -43,11 +55,12 @@ func recognizeTextHandler(request: VNRequest, error: Error?) {
     
     // Process the recognized strings.
     let joined = recognizedStrings.joined(separator: joiner)
-    print("===> Readout text from image: \(joined)")
+    let retString = postProcessText(str: joined)
+    print("===> Readout text from image: \(retString)")
     
     let pasteboard = NSPasteboard.general
     pasteboard.declareTypes([.string], owner: nil)
-    pasteboard.setString(joined, forType: .string)
+    pasteboard.setString(retString, forType: .string)
 }
 
 
