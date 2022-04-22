@@ -4,7 +4,7 @@ import Vision
 // https://developer.apple.com/documentation/vision/vnrecognizetextrequest
 
 let MODE = VNRequestTextRecognitionLevel.accurate // or .fast
-let USE_LANG_CORRECTION = false
+let USE_LANG_CORRECTION = true
 var REVISION:Int
 if #available(macOS 11, *) {
     REVISION = VNRecognizeTextRequestRevision2
@@ -30,6 +30,8 @@ func postProcessText(str: String) -> String
     newString = newString.replacingOccurrences(of: ",", with: "，")
     newString = newString.replacingOccurrences(of: ".", with: "。")
     newString = newString.replacingOccurrences(of: ":", with: "：")
+    newString = newString.replacingOccurrences(of: ";", with: "；")
+    newString = newString.replacingOccurrences(of: "．", with: "•")
     newString = newString.replacingOccurrences(of: "?", with: "？")
     newString = newString.replacingOccurrences(of: "!", with: "！")
     return newString
